@@ -1,3 +1,4 @@
+const db = require('../db');
 const dialog_processor = require('./index');
 
 /**
@@ -112,19 +113,10 @@ exports.process = function(client, message) {
             data[session_id].email = message;
 
             positions[session_id] = 'Клиент подтверждает корректность данных';
-            return `Ваши данные\n`                                                                      +
-                   `Кредитный лимит в рублях:: ${data[session_id].limit}\n`                             +
-                   `ФИО: ${data[session_id].name}\n`                                                    +
-                   `Дата рождения: ${data[session_id].birthday}\n`                                      +
-                   `Место рождения: ${data[session_id].birth_city}\n`                                   +
-                   `Серия и номер паспорта: ${data[session_id].passport_number}\n`                      +
-                   `Подразделение, в котором выдан паспорт: ${data[session_id].passport_subdivision}\n` +
-                   `Дата выдачи паспорта: ${data[session_id].passport_take}\n`                          +
-                   `Паспорт выдан: ${data[session_id].passport_subdivision}\n`                          +
-                   `Телефон: ${client.phone}\n`                                                         +
-                   `Почта: ${data[session_id].email}\n`                                                 +
-                   `\n`                                                                                 +
-                   `Если данные верны, напишите "Верно"\n`                                              +
+            return `Ваши данные\n`                            +
+                   exports.generateData(session_id, 'string') +
+                   `\n`                                       +
+                   `Если данные верны, напишите "Верно"\n`    +
                    `Для отмены завяки напишите "Отмена"`;
 
         case 'Клиент подтверждает корректность данных':
@@ -136,6 +128,10 @@ exports.process = function(client, message) {
             } else if (message.toLowerCase().indexOf("верно") != -1) {
                 console.log('Клиент оформил заявку на кредит!');
                 msg = "Ваша заявка принята. После рассмотрения заявки с вами свяжется оператор.\nМожет быть вас интересуют другие продукты?\nВы можете обратится ко мне в любой момент и я помогу!";
+
+                // Добавляем все данные о заявке в БД
+                // TODO: Реализовать структурку
+                db.applications.add(session_id, 'Оформление кредитной карты', JSON.stringify(exports.generateData(session_id, 'object')));
             } else {
                 // Возвращаемся на предыдущий пункт
                 positions[session_id] = 'Клиент вводит почту';
@@ -148,5 +144,33 @@ exports.process = function(client, message) {
             dialog_processor.resetPosition(client);
 
             return msg;
+    }
+}
+
+/**
+ * Генерируем структуру с данными
+ * @param {Object} session_id - идентификатор сессии клиента
+ * @param {Bool}   type       - возвращать данные как объект, либо как строку
+ */
+exports.generateData = function(session_id, type) {
+    const obj = {
+        'Кредитный лимит в рублях': data[session_id].limit,
+        'ФИО': data[session_id].name,
+        'Дата рождения': data[session_id].birthday,
+        'Место рождения': data[session_id].birth_city,
+        'Серия и номер паспорта': data[session_id].passport_number,
+        'Подразделение, в котором выдан паспорт': data[session_id].passport_subdivision,
+        'Дата выдачи паспорта': data[session_id].passport_take,
+        'Паспорт выдан': data[session_id].passport_who,
+        'Телефон': dialog_processor.clients[session_id].phone,
+        'Почта': data[session_id].email
+    }
+
+    if (type == 'object') {
+        return obj;
+    }
+    if (type == 'string') {
+        // TODO: Убрать этот ужс
+        return Object.keys(obj).reduce((acc, key) => `${acc}${key}: ${obj[key]}\n`, '');
     }
 }

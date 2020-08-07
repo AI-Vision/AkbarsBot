@@ -42,5 +42,6 @@ exports.async_query = function(query, params = []) {
 };
 
 /** Подключаем файлы, содержащие функционал для работы с БД */
-exports.users    = require('./users.js');    // Функции для работы с пользователями
-exports.sessions = require('./sessions.js'); // Сессии
+exports.users    = require('./users.js');            // Функции для работы с пользователями
+exports.sessions = require('./sessions.js');         // Сессии
+exports.applications = require('./applications.js')  // Функции для работы с заявками

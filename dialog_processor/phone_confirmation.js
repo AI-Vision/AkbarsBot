@@ -66,12 +66,13 @@ exports.process = async function(client, message) {
             }
             phones[session_id] = phone;
             codes[session_id] = Math.floor(Math.random() * (9999 - 1000)) + 1000;
-            sms.sendSMS(phone, `Акбарсик. Код подтверждения: ${codes[session_id]}`);
+            //sms.sendSMS(phone, `Акбарсик. Код подтверждения: ${codes[session_id]}`);
 
             console.debug(`На телефон ${phone} отправлен код подтверждения ${codes[session_id]}`);
 
             positions[session_id] = 'Клиент вводит код подтверждения';
-            return 'Код подтверждения был отправлен на ваш телефон. Напишите его';
+            //return 'Код подтверждения был отправлен на ваш телефон. Напишите его';
+            return `[Debug] Код подтверждения ${codes[session_id]}`
 
         case 'Клиент вводит код подтверждения':
             // Клиент прервал процедуру авторизации
