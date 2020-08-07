@@ -1,0 +1,372 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' type='text/css'>
+
+    <!-- Page title -->
+    <title>LUNA | Responsive Admin Theme</title>
+
+    <!-- Vendor styles -->
+    <link rel="stylesheet" href="vendor\fontawesome\css\font-awesome.css">
+    <link rel="stylesheet" href="vendor\animate.css\animate.css">
+    <link rel="stylesheet" href="vendor\bootstrap\css\bootstrap.css">
+    <link rel="stylesheet" href="vendor\toastr\toastr.min.css">
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="styles\pe-icons\pe-icon-7-stroke.css">
+    <link rel="stylesheet" href="styles\pe-icons\helper.css">
+    <link rel="stylesheet" href="styles\stroke-icons\style.css">
+    <link rel="stylesheet" href="styles\style.css">
+</head>
+<body>
+
+<!-- Wrapper-->
+<div class="wrapper">
+
+    <!-- Header-->
+    <%- include('header', { user }); %>
+    <!-- End header-->
+
+    <!-- Navigation-->
+    <%- include('navigation', {user, page: 'index'}); %>
+    <!-- End navigation-->
+
+
+    <!-- Main content-->
+    <section class="content">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="view-header">
+                            <div class="pull-right text-right" style="line-height: 14px">
+                                <small>АК Барс<br>бот<br> <span class="c-white">v.1.0</span></small>
+                            </div>
+                            <div class="header-icon">
+                                <i class="pe page-header-icon pe-7s-shield"></i>
+                            </div>
+                            <div class="header-title">
+                                <h3 class="m-b-xs">Статистика</h3>
+                                <small>
+                                    На данной странице отображается основная статистика бота.
+                                </small>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-2 col-xs-6">
+                        <div class="panel panel-filled">
+
+                            <div class="panel-body">
+                                <h2 class="m-b-none">
+                                    206 <span class="slight"><i class="fa fa-play fa-rotate-270 text-warning"> </i> +20%</span>
+                                </h2>
+                                <div class="small">Сообщений сегодня</div>
+                                <div class="slight m-t-sm"><i class="fa fa-clock-o"> </i> Обновлено: <span class="c-white">10:22</span>  </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-xs-6">
+                        <div class="panel panel-filled">
+                            <div class="panel-body">
+                                <h2 class="m-b-none">
+                                    140 <span class="slight"><i class="fa fa-play fa-rotate-90 c-white"> </i> 5%</span>
+                                </h2>
+                                <div class="small">Клиентов сегодня</div>
+                                <div class="slight m-t-sm"><i class="fa fa-clock-o"> </i> Обновлено: <span class="c-white">9:10am</span> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-xs-6">
+                        <div class="panel panel-filled">
+                            <div class="panel-body">
+                                <h2 class="m-b-none">
+                                    262 <span class="slight"><i class="fa fa-play fa-rotate-270 text-warning"> </i> +56%</span>
+                                </h2>
+                                <div class="small">Всего сообщений</div>
+                                <div class="slight m-t-sm"><i class="fa fa-clock-o"> </i> Обновлено: <span class="c-white">05:42</span> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-xs-6">
+                        <div class="panel panel-filled">
+                            <div class="panel-body">
+                                <h2 class="m-b-none">
+                                    62% <span class="slight"><i class="fa fa-play fa-rotate-270 text-warning"> </i> +18%</span>
+                                </h2>
+                                <div class="small">Всего клиентов</div>
+                                <div class="slight m-t-sm"><i class="fa fa-clock-o"> </i> Обновлено: <span class="c-white">04:00</span> </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-4 col-xs-12">
+                        <div class="panel panel-filled" style="position:relative;height: 114px">
+                            <div style="position: absolute;bottom: 0;left: 0;right: 0">
+                                <span class="sparkline"></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="m-t-sm">
+                                    <div class="c-white"><span class="label label-accent">+45</span> Статистика пользователей за сутки</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Соц. сеть</th>
+                                            <th>Статус</th>
+                                            <th style="text-align: center;">Заявок не обработано</th>
+                                            <th style="text-align: center;">Клиентов сегодня</th>
+                                            <th style="text-align: center;">Клиентов всего</th>
+                                            <th style="text-align: right;">Ссылка на чат</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>Telegram</td>
+                                            <td>
+                                                <span class="label label-success">Активен</span>
+                                            </td>
+                                            <td style="text-align: center;">0</td>
+                                            <td style="text-align: center;">3</td>
+                                            <td style="text-align: center;">3</td>
+                                            <td style="text-align: right;"><a href="#" class="btn btn-default btn-xs">Перейти</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Vk</td>
+                                            <td>
+                                                <span class="label label-success">Активен</span>
+                                            </td>
+                                            <td style="text-align: center;">2</td>
+                                            <td style="text-align: center;">2</td>
+                                            <td style="text-align: center;">2</td>
+                                            <td style="text-align: right;"><a href="#" class="btn btn-default btn-xs">Перейти</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Whatsapp</td>
+                                            <td>
+                                                <span class="label label-success">Активен</span>
+                                            </td>
+                                            <td style="text-align: center;">0</td>
+                                            <td style="text-align: center;">0</td>
+                                            <td style="text-align: center;">0</td>
+                                            <td style="text-align: right;"><a href="#" class="btn btn-default btn-xs">Перейти</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ICQ New</td>
+                                            <td>
+                                                <span class="label label-success">Активен</span>
+                                            </td>
+                                            <td style="text-align: center;">0</td>
+                                            <td style="text-align: center;">1</td>
+                                            <td style="text-align: center;">1</td>
+                                            <td style="text-align: right;"><a href="#" class="btn btn-default btn-xs">Перейти</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Одноклассники</td>
+                                            <td>
+                                                <span class="label label-danger">Ошибка</span>
+                                            </td>
+                                            <td style="text-align: center;">1</td>
+                                            <td style="text-align: center;">0</td>
+                                            <td style="text-align: center;">0</td>
+                                            <td style="text-align: right;"><a href="#" class="btn btn-default btn-xs">Перейти</a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    </section>
+    <!-- End main content-->
+
+</div>
+<!-- End wrapper-->
+
+<!-- Vendor scripts -->
+<script src="vendor\pacejs\pace.min.js"></script>
+<script src="vendor\jquery\dist\jquery.min.js"></script>
+<script src="vendor\bootstrap\js\bootstrap.min.js"></script>
+<script src="vendor\toastr\toastr.min.js"></script>
+<script src="vendor\sparkline\index.js"></script>
+<script src="vendor\flot\jquery.flot.min.js"></script>
+<script src="vendor\flot\jquery.flot.resize.min.js"></script>
+<script src="vendor\flot\jquery.flot.spline.js"></script>
+
+<!-- App scripts -->
+<script src="scripts\luna.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+
+        // Sparkline charts
+        var sparklineCharts = function () {
+            $(".sparkline").sparkline([20, 34, 43, 43, 35, 44, 32, 44, 52, 45], {
+                type: 'line',
+                lineColor: '#FFFFFF',
+                lineWidth: 3,
+                fillColor: '#404652',
+                height: 47,
+                width: '100%'
+            });
+
+            $(".sparkline7").sparkline([10, 34, 13, 33, 35, 24, 32, 24, 52, 35], {
+                type: 'line',
+                lineColor: '#FFFFFF',
+                lineWidth: 3,
+                fillColor: '#f7af3e',
+                height: 75,
+                width: '100%'
+            });
+
+            $(".sparkline1").sparkline([0, 6, 8, 3, 2, 4, 3, 4, 9, 5, 3, 4, 4, 5, 1, 6, 7, 15, 6, 4, 0], {
+                type: 'line',
+                lineColor: '#2978BB',
+                lineWidth: 3,
+                fillColor: '#2978BB',
+                height: 170,
+                width: '100%'
+            });
+
+            $(".sparkline3").sparkline([-8, 2, 4, 3, 5, 4, 3, 5, 5, 6, 3, 9, 7, 3, 5, 6, 9, 5, 6, 7, 2, 3, 9, 6, 6, 7, 8, 10, 15, 16, 17, 15], {
+
+                type: 'line',
+                lineColor: '#fff',
+                lineWidth: 3,
+                fillColor: '#393D47',
+                height: 70,
+                width: '100%'
+            });
+
+            $(".sparkline5").sparkline([0, 6, 8, 3, 2, 4, 3, 4, 9, 5, 3, 4, 4, 5], {
+                type: 'line',
+                lineColor: '#f7af3e',
+                lineWidth: 2,
+                fillColor: '#2F323B',
+                height: 20,
+                width: '100%'
+            });
+            $(".sparkline6").sparkline([0, 1, 4, 2, 2, 4, 1, 4, 3, 2, 3, 4, 4, 2, 4, 2, 1, 3], {
+                type: 'bar',
+                barColor: '#f7af3e',
+                height: 20,
+                width: '100%'
+            });
+
+            $(".sparkline8").sparkline([4, 2], {
+                type: 'pie',
+                sliceColors: ['#f7af3e', '#404652']
+            });
+            $(".sparkline9").sparkline([3, 2], {
+                type: 'pie',
+                sliceColors: ['#f7af3e', '#404652']
+            });
+            $(".sparkline10").sparkline([4, 1], {
+                type: 'pie',
+                sliceColors: ['#f7af3e', '#404652']
+            });
+            $(".sparkline11").sparkline([1, 3], {
+                type: 'pie',
+                sliceColors: ['#f7af3e', '#404652']
+            });
+            $(".sparkline12").sparkline([3, 5], {
+                type: 'pie',
+                sliceColors: ['#f7af3e', '#404652']
+            });
+            $(".sparkline13").sparkline([6, 2], {
+                type: 'pie',
+                sliceColors: ['#f7af3e', '#404652']
+            });
+        };
+
+        var sparkResize;
+
+        // Resize sparkline charts on window resize
+        $(window).resize(function () {
+            clearTimeout(sparkResize);
+            sparkResize = setTimeout(sparklineCharts, 100);
+        });
+
+        // Run sparkline
+        sparklineCharts();
+
+
+        // Flot charts data and options
+        var data1 = [ [0, 16], [1, 24], [2, 11], [3, 7], [4, 10], [5, 15], [6, 24], [7, 30] ];
+        var data2 = [ [0, 26], [1, 44], [2, 31], [3, 27], [4, 36], [5, 46], [6, 56], [7, 66] ];
+
+        var chartUsersOptions = {
+            series: {
+                splines: {
+                    show: true,
+                    tension: 0.4,
+                    lineWidth: 1,
+                    fill: 1
+
+                }
+
+            },
+            grid: {
+                tickColor: "#404652",
+                borderWidth: 0,
+                borderColor: '#404652',
+                color: '#404652'
+            },
+            colors: [ "#f7af3e","#DE9536"]
+        };
+
+        $.plot($("#flot-line-chart"), [data2, data1], chartUsersOptions);
+
+
+        // Run toastr notification with Welcome message
+        setTimeout(function(){
+            toastr.options = {
+                "positionClass": "toast-top-right",
+                "closeButton": true,
+                "progressBar": true,
+                "showEasing": "swing",
+                "timeOut": "6000"
+            };
+            toastr.warning('<strong>You entered to LUNA</strong> <br/><small>Premium admin theme with Dark UI style. </small>');
+        },1600)
+
+
+    });
+</script>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-4625583-2', 'webapplayers.com');
+        ga('send', 'pageview');
+
+    </script>
+
+</body>
+
+</html>

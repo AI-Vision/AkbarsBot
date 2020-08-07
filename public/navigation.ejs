@@ -1,0 +1,37 @@
+<% /**
+    * Панелька слева
+    * @param user [object] - объект пользователя
+    * @param page [string] - название страницы
+    */ %>
+    <aside class="navigation">
+        <nav>
+            <ul class="nav luna-nav">
+                <li <% if (page == 'index') { %> class="active" <% } %>>
+                    <a href="index">Главная</a>
+                </li>
+                <li <% if (page == 'applications') { %> class="active" <% } %>>
+                    <a href="applications">Заявки</a>
+                </li>
+
+                <li <% if (page == 'credits' || page == 'deposits' || page == 'cards')  { %> class="active" <% } %>>
+                    <a href="#products" data-toggle="collapse">
+                        Продукты<span class="sub-nav-icon"> <i class="stroke-arrow"></i> </span>
+                    </a>
+                    <ul id="products" class="nav nav-second collapse">
+                        <li <% if (page == 'credits') { %> class="active" <% } %>>
+                            <a href="credits">Кредиты</a>
+                        </li>
+                        <li <% if (page == 'deposits') { %> class="active" <% } %>>
+                            <a href="credits">Вклады</a>
+                        </li>
+                        <li <% if (page == 'cards') { %> class="active" <% } %>>
+                            <a href="credits">Карты</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+
+            </ul>
+        </nav>
+    </aside>
