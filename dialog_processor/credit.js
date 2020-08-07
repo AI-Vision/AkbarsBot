@@ -62,14 +62,14 @@ exports.process = function(client, message) {
             data[session_id].email = message;
 
             positions[session_id] = 'Клиент подтверждает корректность данных';
-            return `Ваши данные\n` +
-                   `Сумма кредита: ${data[session_id].sum}\n`      +
+            return `Ваши данные\n`                                        +
+                   `Сумма кредита: ${data[session_id].sum}\n`             +
                    `Срок кредитования (мес.): ${data[session_id].time}\n` +
-                   `ФИО: ${data[session_id].name}\n`               +
-                   `Телефон: ${client.phone}\n`          +
-                   `Почта: ${data[session_id].email}\n`            +
-                   `\n`                                            +
-                   `Если данные верны, напишите "Верно"\n`         +
+                   `ФИО: ${data[session_id].name}\n`                      +
+                   `Телефон: ${client.phone}\n`                           +
+                   `Почта: ${data[session_id].email}\n`                   +
+                   `\n`                                                   +
+                   `Если данные верны, напишите "Верно"\n`                +
                    `Для отмены завяки напишите "Отмена"`;
 
         case 'Клиент подтверждает корректность данных':

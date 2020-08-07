@@ -56,10 +56,10 @@ exports.process = function(client, message) {
             data[session_id].email = message;
 
             positions[session_id] = 'Клиент подтверждает корректность данных';
-            return `Ваши данные\n` +
+            return `Ваши данные\n`                                  +
                     `ФИО: ${data[session_id].name}\n`               +
                     `Дата рождения: ${data[session_id].birthday}\n` +
-                    `Телефон: ${client.phone}\n`          +
+                    `Телефон: ${client.phone}\n`                    +
                     `Почта: ${data[session_id].email}\n`            +
                     `\n`                                            +
                     `Если данные верны, напишите "Верно"\n`         +

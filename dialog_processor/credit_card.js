@@ -112,19 +112,19 @@ exports.process = function(client, message) {
             data[session_id].email = message;
 
             positions[session_id] = 'Клиент подтверждает корректность данных';
-            return `Ваши данные\n` +
-                   `Кредитный лимит в рублях:: ${data[session_id].limit}\n`      +
-                   `ФИО: ${data[session_id].name}\n`               +
-                   `Дата рождения: ${data[session_id].birthday}\n` +
-                   `Место рождения: ${data[session_id].birth_city}\n` +
-                   `Серия и номер паспорта: ${data[session_id].passport_number}\n` +
+            return `Ваши данные\n`                                                                      +
+                   `Кредитный лимит в рублях:: ${data[session_id].limit}\n`                             +
+                   `ФИО: ${data[session_id].name}\n`                                                    +
+                   `Дата рождения: ${data[session_id].birthday}\n`                                      +
+                   `Место рождения: ${data[session_id].birth_city}\n`                                   +
+                   `Серия и номер паспорта: ${data[session_id].passport_number}\n`                      +
                    `Подразделение, в котором выдан паспорт: ${data[session_id].passport_subdivision}\n` +
-                   `Дата выдачи паспорта: ${data[session_id].passport_take}\n` +
-                   `Паспорт выдан: ${data[session_id].passport_subdivision}\n` +
-                   `Телефон: ${client.phone}\n`          +
-                   `Почта: ${data[session_id].email}\n`            +
-                   `\n`                                            +
-                   `Если данные верны, напишите "Верно"\n`         +
+                   `Дата выдачи паспорта: ${data[session_id].passport_take}\n`                          +
+                   `Паспорт выдан: ${data[session_id].passport_subdivision}\n`                          +
+                   `Телефон: ${client.phone}\n`                                                         +
+                   `Почта: ${data[session_id].email}\n`                                                 +
+                   `\n`                                                                                 +
+                   `Если данные верны, напишите "Верно"\n`                                              +
                    `Для отмены завяки напишите "Отмена"`;
 
         case 'Клиент подтверждает корректность данных':
