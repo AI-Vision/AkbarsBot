@@ -1,5 +1,4 @@
 const uuid       = require('uuid-by-string');
-const { process } = require('./dialogflow');
 
 const processors = {
     dialogflow:  require('./dialogflow'),
@@ -20,8 +19,8 @@ const Positions = {
     DialogFlow: 'DialogFlow', // Общается с DialogFlow ботом
 
     DepositOpen: 'Переходим на составление заявки на открытие вклада',
-    OpenCredir: 'Переходим на составление заявки на кредит',
     CreditCard: 'Переходим на составление заявки на кредитную карту',
+    OpenCredir: 'Переходим на составление заявки на кредит',
     DebitCard: 'Переходим на составление заявки на дебетовую карту',
     OpenPIF: 'Переходим на составление заявки на открытие ПИФ',
 }

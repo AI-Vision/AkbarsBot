@@ -70,7 +70,7 @@ exports.process = function(client, message) {
             positions[session_id] = 'Клиент подтверждает корректность данных';
             return `Ваши данные\n` +
                    `Сумма кредита: ${data[session_id].sum}\n`      +
-                   `Срок кредитования: ${data[session_id].time}\n` +
+                   `Срок кредитования (мес.): ${data[session_id].time}\n` +
                    `ФИО: ${data[session_id].name}\n`               +
                    `Телефон: ${data[session_id].phone}\n`          +
                    `Почта: ${data[session_id].email}\n`            +
