@@ -116,70 +116,31 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        <span class="label label-default">Не рассмотрена</span>
-                                    </td>
-                                    <td>Telegram</td>
-                                    <td>
-                                        <a href="#">Кредит</a>
-                                        <div class="small"><i class="fa fa-clock-o"></i> Создана 01.08.2020</div>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group pull-right">
-                                            <button class="btn btn-default btn-xs"><i class="fa fa-folder"></i> Просмотр </button>
-                                            <button class="btn btn-default btn-xs"><i class="fa fa-sticky-note"></i> Заметка </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-accent">На рассмотрении</span>
-                                    </td>
-                                    <td>Telegram</td>
-                                    <td>
-                                        <a href="#">Открытие брокерского счета</a>
-                                        <div class="small"><i class="fa fa-clock-o"></i> Создана 12.04.2017</div>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group pull-right">
-                                            <button class="btn btn-default btn-xs"><i class="fa fa-folder"></i> Просмотр </button>
-                                            <button class="btn btn-default btn-xs"><i class="fa fa-sticky-note"></i> Заметка </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-success">Рассмотрена</span>
-                                    </td>
-                                    <td>Telegram</td>
-                                    <td>
-                                        <a href="#">Дебетовая карта</a>
-                                        <div class="small"><i class="fa fa-clock-o"></i> Создана 12.04.2017</div>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group pull-right">
-                                            <button class="btn btn-default btn-xs"><i class="fa fa-folder"></i> Просмотр </button>
-                                            <button class="btn btn-default btn-xs"><i class="fa fa-sticky-note"></i> Заметка </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="label label-success">Рассмотрена</span>
-                                    </td>
-                                    <td>Telegram</td>
-                                    <td>
-                                        <a href="#">Вклад</a>
-                                        <div class="small"><i class="fa fa-clock-o"></i> Создана 10.05.2017</div>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group pull-right">
-                                            <button class="btn btn-default btn-xs"><i class="fa fa-folder"></i> Просмотр </button>
-                                            <button class="btn btn-default btn-xs"><i class="fa fa-sticky-note"></i> Заметка </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <% for (let application of applications) { %>
+                                    <tr>
+                                        <td>
+                                            <% switch (application.status) {
+                                                case 0 /* Не рассмотрена */: %>
+                                                    <span class="label label-default">Не рассмотрена</span>
+                                                <% break;
+                                                case 1 /** На рассмотрении */: %>
+                                                    <span class="label label-accent">На рассмотрении</span>
+                                                <% break;
+                                                case 2 /** Рассмотрена */: %>
+                                                    <span class="label label-success">Рассмотрена</span>
+                                            <% } %>
+                                        </td>
+                                        <td>Telegram</td>
+                                        <td><a href="#"><%= application.application %></a>
+                                            <div class="small"><i class="fa fa-clock-o"></i> Создана <%= application.created.split('T')[0] %></div>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group pull-right">
+                                                <button onclick="showApplication('<%= application.id %>')" class="btn btn-default btn-xs"><i class="fa fa-folder"></i> Просмотр </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% } %>
                                 </tbody>
                             </table>
                             </div>
@@ -198,47 +159,29 @@
             </div>
         </div>
 
-        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"> Launch demo modal</button>
-
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header text-center">
-                        <h4 class="modal-title">Modal title</h4>
-                        <small>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</small>
+                        <h4 class="modal-title" id="name"></h4>
                     </div>
                     <div class="modal-body">
-                        <h4 class="m-t-none">Lorem Ipsum is simply</h4>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.</p>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <small class="stat-label">Today</small>
-                                <h4 class="m-t-xs">170,20 <i class="fa fa-level-up text-accent"></i></h4>
-                            </div>
-                            <div class="col-md-4">
-                                <small class="stat-label">Last month %</small>
-                                <h4 class="m-t-xs">%20,20 <i class="fa fa-level-down c-white"></i></h4>
-                            </div>
-                            <div class="col-md-4">
-                                <small class="stat-label">Last year</small>
-                                <h4 class="m-t-xs">246,40 <i class="fa fa-level-up text-accent"></i></h4>
-                            </div>
-                        </div>
-                        <div class="progress m-t-xs full progress-small">
-                            <div style="width: 65%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="65" role="progressbar" class=" progress-bar progress-bar-warning">
-                                <span class="sr-only">65% Complete (success)</span>
-                            </div>
-                        </div>
+                        <!-- Данные заявки -->
+                        <table class="table table-condensed" id="params">
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <!-- /Данные заявки -->
                         <!-- Чат -->
                         <div class="chat_window">
                             <ul class="messages"></ul>
                             <div class="bottom_wrapper clearfix">
                                 <div class="message_input_wrapper">
-                                    <input class="message_input" placeholder="Type your message here..." />
+                                    <input class="message_input" placeholder="Напишите ваше сообщение клиенту..." />
                                 </div>
                                 <div class="send_message">
                                     <div class="icon"></div>
-                                    <div class="text">Send</div>
+                                    <div class="text">Отправить</div>
                                 </div>
                             </div>
                         </div>
@@ -274,7 +217,12 @@
 <!-- App scripts -->
 <script src="scripts\luna.js"></script>
 <script src="scripts\chat.js"></script>
+<script src="scripts\applications.js"></script>
 
+<script>
+/** Храним все заявления */
+var applications = <%- JSON.stringify(applications) %>
+</script>
 
 </body>
 
