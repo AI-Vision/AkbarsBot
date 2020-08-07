@@ -61,12 +61,6 @@ exports.process = function(client, message) {
         case 'Клиент вводит ФИО':
             data[session_id].name = message; // TODO: Проверять данные
 
-            positions[session_id] = 'Клиент вводит телефон';
-            return 'Напишите номер вашего телефона ';
-
-        case 'Клиент вводит телефон':
-            data[session_id].phone = message;
-
             positions[session_id] = 'Клиент вводит почту';
             return 'Напишите вашу почту';
 
@@ -79,7 +73,7 @@ exports.process = function(client, message) {
                    `Сумма вклада: ${data[session_id].sum}\n`        +
                    `Срок вклада: ${data[session_id].time}\n`        +
                    `ФИО: ${data[session_id].name}\n`                +
-                   `Телефон: ${data[session_id].phone}\n`           +
+                   `Телефон: ${client.phone}\n`           +
                    `Почта: ${data[session_id].email}\n`             +
                    `\n`                                             +
                    `Если данные верны, напишите "Верно"\n`          +

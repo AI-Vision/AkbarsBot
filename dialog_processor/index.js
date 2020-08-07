@@ -1,6 +1,8 @@
 const uuid       = require('uuid-by-string');
 
 const processors = {
+    phone_confirmation: require('./phone_confirmation'),
+
     dialogflow:  require('./dialogflow'),
 
     credit_card: require('./credit_card'),
@@ -31,6 +33,7 @@ const Positions = {
  *     @property {String} session_id - идентификатор сессии клиента
  *     @property {String} positioin  - позиция в диалоге, одно из Position
  *     @property {String} interest   - услуга, которую выбрал клиент, например название дебетовой карты
+ *     @property {String} phone      - телефон клиента, подтвержденный по СМС
  */
 let clients = [];
 
@@ -65,8 +68,15 @@ exports.process = async function(message, client_id, messenger) {
 
     // Если клиент еще не писал, то его нет в этом массиве
     if (clients[session_id] == undefined) {
-        clients[session_id] = {position: Positions.DialogFlow, session_id, interest: null};
+        clients[session_id] = {position: Positions.DialogFlow, session_id, interest: null, phone: null};
     }
+
+    // Если клиент общается не с DialogFlow, т.е. составляет заявку, то у него должен быть подтвержден номер телефона
+    if (clients[session_id].position != Positions.DialogFlow && !clients[session_id].phone) {
+        const res = await processors.phone_confirmation.process(clients[session_id], message);
+        if (res != 'Телефон подтвержден') return res;
+    }
+
     const client = clients[session_id];
     console.log(client);
 
@@ -129,3 +139,5 @@ exports.process = async function(message, client_id, messenger) {
 exports.resetPosition = function(client) {
     clients[client.session_id].position = Positions.DialogFlow;
 }
+
+exports.clients = clients;

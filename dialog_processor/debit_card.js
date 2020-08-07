@@ -49,48 +49,42 @@ exports.process = function(client, message) {
         case 'Клиент вводит дату рождения':
             data[session_id].birthday = message;
 
-            positions[session_id] = 'Клиент вводит телефон';
-            return 'Напишите номер вашего телефона ';
+            positions[session_id] = 'Клиент вводит почту';
+            return 'Напишите вашу почту';
 
-            case 'Клиент вводит номер телефона':
-                data[session_id].phone = message;
+        case 'Клиент вводит почту':
+            data[session_id].email = message;
 
+            positions[session_id] = 'Клиент подтверждает корректность данных';
+            return `Ваши данные\n` +
+                    `ФИО: ${data[session_id].name}\n`               +
+                    `Дата рождения: ${data[session_id].birthday}\n` +
+                    `Телефон: ${client.phone}\n`          +
+                    `Почта: ${data[session_id].email}\n`            +
+                    `\n`                                            +
+                    `Если данные верны, напишите "Верно"\n`         +
+                    `Для отмены завяки напишите "Отмена"`;
+
+        case 'Клиент подтверждает корректность данных':
+            let msg;
+
+            if (message.toLowerCase().indexOf("отмена") != -1) {
+                console.log('Клиент отменил оформление заявки на дебетовую карту')
+                msg = "Ваша заявка отменена.\nМожет быть вас интересуют другие продукты?\nВы можете обратится ко мне в любой момент и я помогу!";
+            } else if (message.toLowerCase().indexOf("верно") != -1) {
+                console.log('Клиент оформил заявку на дебетовую карту');
+                msg = "Ваша заявка принята. После рассмотрения заявки с вами свяжется оператор.\nМожет быть вас интересуют другие продукты?\nВы можете обратится ко мне в любой момент и я помогу!";
+            } else {
+                // Возвращаемся на предыдущий пункт
                 positions[session_id] = 'Клиент вводит почту';
-                return 'Напишите вашу почту';
+                return exports.process(client, data[session_id].email);
+            }
 
-            case 'Клиент вводит почту':
-                data[session_id].email = message;
+            // Удаляем ненужные данные и сбрасываем позицию
+            delete data[session_id];
+            delete positions[session_id];
+            dialog_processor.resetPosition(client);
 
-                positions[session_id] = 'Клиент подтверждает корректность данных';
-                return `Ваши данные\n` +
-                       `ФИО: ${data[session_id].name}\n`               +
-                       `Дата рождения: ${data[session_id].birthday}\n` +
-                       `Телефон: ${data[session_id].phone}\n`          +
-                       `Почта: ${data[session_id].email}\n`            +
-                       `\n`                                            +
-                       `Если данные верны, напишите "Верно"\n`         +
-                       `Для отмены завяки напишите "Отмена"`;
-
-            case 'Клиент подтверждает корректность данных':
-                let msg;
-
-                if (message.toLowerCase().indexOf("отмена") != -1) {
-                    console.log('Клиент отменил оформление заявки на дебетовую карту')
-                    msg = "Ваша заявка отменена.\nМожет быть вас интересуют другие продукты?\nВы можете обратится ко мне в любой момент и я помогу!";
-                } else if (message.toLowerCase().indexOf("верно") != -1) {
-                    console.log('Клиент оформил заявку на дебетовую карту');
-                    msg = "Ваша заявка принята. После рассмотрения заявки с вами свяжется оператор.\nМожет быть вас интересуют другие продукты?\nВы можете обратится ко мне в любой момент и я помогу!";
-                } else {
-                    // Возвращаемся на предыдущий пункт
-                    positions[session_id] = 'Клиент вводит почту';
-                    return exports.process(client, data[session_id].email);
-                }
-
-                // Удаляем ненужные данные и сбрасываем позицию
-                delete data[session_id];
-                delete positions[session_id];
-                dialog_processor.resetPosition(client);
-
-                return msg;
-        }
+            return msg;
+    }
 }
