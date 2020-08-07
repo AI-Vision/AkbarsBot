@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="styles\pe-icons\helper.css">
     <link rel="stylesheet" href="styles\stroke-icons\style.css">
     <link rel="stylesheet" href="styles\style.css">
+    <link rel="stylesheet" href="styles\chat.css">
 </head>
 <body>
 
@@ -195,8 +196,70 @@
                     <li><a href="#">Вперед</a></li>
                 </ul>
             </div>
-
         </div>
+
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"> Launch demo modal</button>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title">Modal title</h4>
+                        <small>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</small>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="m-t-none">Lorem Ipsum is simply</h4>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.</p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <small class="stat-label">Today</small>
+                                <h4 class="m-t-xs">170,20 <i class="fa fa-level-up text-accent"></i></h4>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="stat-label">Last month %</small>
+                                <h4 class="m-t-xs">%20,20 <i class="fa fa-level-down c-white"></i></h4>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="stat-label">Last year</small>
+                                <h4 class="m-t-xs">246,40 <i class="fa fa-level-up text-accent"></i></h4>
+                            </div>
+                        </div>
+                        <div class="progress m-t-xs full progress-small">
+                            <div style="width: 65%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="65" role="progressbar" class=" progress-bar progress-bar-warning">
+                                <span class="sr-only">65% Complete (success)</span>
+                            </div>
+                        </div>
+                        <!-- Чат -->
+                        <div class="chat_window">
+                            <ul class="messages"></ul>
+                            <div class="bottom_wrapper clearfix">
+                                <div class="message_input_wrapper">
+                                    <input class="message_input" placeholder="Type your message here..." />
+                                </div>
+                                <div class="send_message">
+                                    <div class="icon"></div>
+                                    <div class="text">Send</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message_template">
+                            <li class="message">
+                                <!--<div class="avatar"></div>-->
+                                <div class="text_wrapper">
+                                    <div class="text"></div>
+                                </div>
+                            </li>
+                        </div>
+                        <!-- /Чат -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-accent">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </section>
     <!-- End main content-->
 
@@ -210,10 +273,7 @@
 
 <!-- App scripts -->
 <script src="scripts\luna.js"></script>
-
-
-<!-- App scripts -->
-<script src="scripts\luna.js"></script>
+<script src="scripts\chat.js"></script>
 
 
 </body>
