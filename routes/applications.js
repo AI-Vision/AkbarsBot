@@ -15,6 +15,20 @@ router.get('/', async function(req, res){
     });
 })
 
+router.post('/update_status', async function(req, res) {
+    if (!req.isAuthenticated()) return res.status(401);
+
+    const id = req.body.id;
+    const status = req.body.status;
+
+    if (status == '0' || status == '1' || status == '2') {
+        db.applications.setStatus(id, status);
+    }else {
+        console.warn(`Администратор ${req.user.login} пытается установить некорректный статус: ${status} у ${id}`);
+    }
+    res.send('ok');
+})
+
 const wss = new WebSocket.Server({ port: 9000 });
 wss.on('connection', function connection(ws) {
     // Клиент, с котором общается клиент банка

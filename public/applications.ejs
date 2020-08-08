@@ -174,6 +174,24 @@
                         </table>
                         <!-- /Данные заявки -->
 
+                        <!-- Установка статуса заявки -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Статус</label>
+                            <div class="col-sm-6">
+                                <select id="new_status" class="form-control">
+                                    <option value="0">Не рассмотрена</option>
+                                    <option value="1">На рассмотрении</option>
+                                    <option value="2">Рассмотрена</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <a href="#" id="update_status" class="btn btn-accent">Обновить</a>
+                            </div>
+                        </div>
+                        <!-- Установка статуса заявки -->
+
+                        <div style="padding: 25px;"></div>
+
                         <!-- Включалка чата -->
                         <div class="form-group">
                             <p>Подключиться к чату&nbsp;&nbsp;<input type="checkbox" id="switch"></p>
@@ -231,6 +249,9 @@
 <script>
 /** Храним все заявления */
 var applications = <%- JSON.stringify(applications) %>
+
+/** Идентификатор открытой заявки */
+var active_application_id = null;
 
 /** Данные клиента в чате */
 var active_chat = {

@@ -11,11 +11,6 @@ router.use(bodyParser.urlencoded({   // To support URL-encoded bodies
     extended: true
 }));
 
-router.use(function(req, res, next) {
-    console.log(`${req.method} ${req.originalUrl}`);
-    next();
-})
-
 /** HTTP request handlers */
 router.use('/login',  require('./routes/login.js'));
 router.use('/index',  require('./routes/index.js'));

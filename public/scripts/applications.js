@@ -3,6 +3,7 @@ Pace.options.ajax.trackWebSockets = false;
 function showApplication(id) {
     const application = applications.find(app => app.id == id);
 
+    active_application_id = application.id;
     active_chat.client_id = application.client_id;
     active_chat.messenger = application.messenger;
 
@@ -24,6 +25,23 @@ function showApplication(id) {
 
     $('#modal').modal('show');
 }
+
+/**
+ * При обновлении статуса
+ */
+$("#update_status").click(function() {
+    const status = 	$("#new_status").val();
+    const id = active_application_id;
+
+    $.ajax({
+        type: 'POST',
+        url: '/applications/update_status',
+        data: { id, status },
+        success: function(res) {
+            alert('Статус обновлен!');
+        }
+    });
+});
 
 /**
  * При переключении свитча, подключаемся к чату
