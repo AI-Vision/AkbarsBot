@@ -32,8 +32,8 @@ const Positions = {
 /**
  * Список всех клиентов
  * Для каждого клиента хранятся данные
- *     @property {String} messenger  - мессенджер или соц. сеть клиента
  *     @property {String} client_id  - идентификатор клиента
+ *     @property {String} messenger  - мессенджер или соц. сеть клиента
  *     @property {String} session_id - идентификатор сессии клиента
  *     @property {String} positioin  - позиция в диалоге, одно из Position
  *     @property {String} interest   - услуга, которую выбрал клиент, например название дебетовой карты
@@ -72,7 +72,14 @@ exports.process = async function(message, client_id, messenger) {
 
     // Если клиент еще не писал, то его нет в этом массиве
     if (clients[session_id] == undefined) {
-        clients[session_id] = {position: Positions.DialogFlow, session_id, messenger, client_id, interest: null, phone: null};
+        clients[session_id] = {position: Positions.DialogFlow, session_id, client_id, messenger, interest: null, phone: null};
+    }
+
+    // Может быть такое, что клиента нет в массиве активных клиентов (т.е. сервер недавно перезагрузился),
+    // но специалист банка открыл чат с этим клиентом и уже общается с ним.
+    const key = `${client_id}|${messenger}`;
+    if (links[key]) {
+        clients[session_id].position = Positions.BankSpecialist;
     }
 
     // Если клиент общается не с DialogFlow, т.е. составляет заявку, то у него должен быть подтвержден номер телефона
@@ -111,7 +118,7 @@ exports.process = async function(message, client_id, messenger) {
 
         // Общается со специалистом из банка
         case Positions.BankSpecialist:
-            exports.sendToBankSpecialist(session_id, message);
+            exports.sendToBankSpecialist(client_id, messenger, message);
             return null;
 
 
@@ -167,48 +174,74 @@ exports.resetPosition = function(session_id) {
 //      Работа с BankSpecialis <-> client      //
 /////////////////////////////////////////////////
 /**
- * Ассоциативный список session_id => BankSpecialis
+ * Ассоциативный список
+ * Привязываем клиента к работнику банка
+ * @key   {String} что-то вроде хэша, получаем: client_id + '|' + key
+ * @value {Object} объект типа WebSocker, с помощью которого можно писать специалисту банка
  */
 let links = {};
 
 /**
- * Функция, вызываемая 'извне' - когда специалист банка открывает чат
- * Устаналивает позицию на BankSpecialist
+ * Функция вызывается, когда специалист банка открывает чат
+ * Если клиент уже писал боту, то устаналиваем ему позицию на BankSpecialist
+ * @note После перезагрузки сервера массив с активными клиентами оказывается пустым
+ *       В то время как работник банка может писать человеку в чат
  *
- * @param {String} session_id      - идентфиикатор клиента
+ * @param {String} client_id       - идентфиикатор клиента
+ * @param {String} messenger       - мессенджер клиента
  * @param {Object} bank_specialist - WebSocker объект банковского специалиста
  */
-exports.startChatToBankSpecialist = function(session_id, bank_specialist) {
-    clients[session_id].position = Positions.BankSpecialist;
-
-    links[session_id] = bank_specialist;
+exports.startChatToBankSpecialist = function(client_id, messenger, bank_specialist) {
+    const client = clients.find(client => client.client_id == client_id && clients.messenger == messenger);
+    if (client) {
+        // Меняем позицию активному клиенту
+        clients[client.session_id].position = Positions.BankSpecialist;
+    }
+    const key  = `${client_id}|${messenger}`;
+    links[key] = bank_specialist;
 }
 
 /**
- * Функция, вызываемая 'извне' - когда специалист банка закрыл чат
- * @param {String} session_id - идентфиикатор клиента
+ * Функция вызывается, когда специалист банка закрывает чат
+ * Если клиент уже писал боту, то устанавливаем ему позицию DialogFlow
+ * @note После перезагрузки сервера массив с активными клиентами оказывается пустым
+ *       В то время как работник банка может писать человеку в чат
+ *
+ * @param {String} client_id - идентфиикатор клиента
+ * @param {String} messenger - мессенджер клиента
  */
-exports.stopChatToBankSpecialist = function(session_id) {
-    clients[session_id].position = Positions.DialogFlow;
-
-    delete links[session_id];
+exports.stopChatToBankSpecialist = function(client_id, messenger) {
+    const client = clients.find(client => client.client_id == client_id && clients.messenger == messenger);
+    if (client) {
+        // Меняем позицию активному клиенту
+        clients[session_id].position = Positions.BankSpecialist;
+    }
+    const key  = `${client_id}|${messenger}`;
+    delete links[key];
 }
 
 /**
  * Отправляем сообщение клиенту
+ * @note Функция работает даже для неактивных клиентов
+ *       Т.е. для тех, кого нету в массиве с активными клиентами `clients`
+ *
+ * @param {String} client_id - идентфиикатор клиента
+ * @param {String} messenger - мессенджер клиента
+ * @param {String} message   - сообщение
  */
-exports.sendToClient = function(session_id, message) {
-    const client_id = clients[session_id].client_id;
-    const messenger = clients[session_id].messenger;
-
+exports.sendToClient = function(client_id, messenger, message) {
     messengers[messenger].sendMessage(message, client_id);
 }
 
 /**
- * Отправляем сообщение банковскому специалисту
+ * Отправляем сообщение специалисту банка
+ * @param {String} client_id - идентфиикатор клиента
+ * @param {String} messenger - мессенджер клиента
+ * @param {String} message   - сообщение
  */
-exports.sendToBankSpecialist = function(session_id, message) {
-    const bank_specialist = links[session_id];
+exports.sendToBankSpecialist = function(client_id, messenger, message) {
+    const key  = `${client_id}|${messenger}`;
+    const bank_specialist = links[key];
     bank_specialist.send(message);
 }
 

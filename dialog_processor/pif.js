@@ -119,7 +119,12 @@ exports.process = function(client, message) {
                 console.log('Клиент оформил заявку на ПИФ!');
                 msg = "Ваша заявка принята. После рассмотрения заявки с вами свяжется оператор.\nМожет быть вас интересуют другие продукты?\nВы можете обратится ко мне в любой момент и я помогу!";
 
-                db.applications.add(session_id, 'Открытие ПИФ', JSON.stringify(exports.generateData(session_id, 'object')));
+                db.applications.add(
+                    client.client_id,
+                    client.messenger,
+                    'Открытие ПИФ',
+                    JSON.stringify(exports.generateData(session_id, 'object'))
+                );
             } else {
                 // Возвращаемся на предыдущий пункт
                 positions[session_id] = 'Клиент вводит почту';

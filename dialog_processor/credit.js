@@ -82,7 +82,12 @@ exports.process = function(client, message) {
 
                 // Добавляем все данные о заявке в БД
                 // TODO: Реализовать структурку
-                db.applications.add(session_id, 'Оформление кредита', JSON.stringify(exports.generateData(session_id, 'object')));
+                db.applications.add(
+                    client.client_id,
+                    client.messenger,
+                    'Оформление кредита',
+                    JSON.stringify(exports.generateData(session_id, 'object'))
+                );
             } else {
                 // Возвращаемся на предыдущий пункт
                 positions[session_id] = 'Клиент вводит почту';

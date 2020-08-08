@@ -131,7 +131,7 @@
                                                     <span class="label label-success">Рассмотрена</span>
                                             <% } %>
                                         </td>
-                                        <td>Telegram</td>
+                                        <td><%= application.messenger %></td>
                                         <td><a href="#"><%= application.application %></a>
                                             <div class="small"><i class="fa fa-clock-o"></i> Создана <%= application.created.split('T')[0] %></div>
                                         </td>
@@ -232,8 +232,11 @@
 /** Храним все заявления */
 var applications = <%- JSON.stringify(applications) %>
 
-/** Активная сессия в чате */
-var chat_session_id;
+/** Данные клиента в чате */
+var active_chat = {
+    client_id: null,
+    messenger: null
+};
 
 /** Вебсокет создается при открытии чата */
 var webSocket = null;

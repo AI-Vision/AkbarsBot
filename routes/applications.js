@@ -18,37 +18,43 @@ router.get('/', async function(req, res){
 const wss = new WebSocket.Server({ port: 9000 });
 wss.on('connection', function connection(ws) {
     // Клиент, с котором общается клиент банка
-    let session_id;
+    let client_id = null;
+    let messenger = null;
 
     ws.on('message', function incoming(message) {
         const data = JSON.parse(message);
 
         // Специалист банка подключается в чат
         if (data.type == 'Open chat') {
-            session_id = data.session_id;
+            client_id = data.client_id;
+            messenger = data.messenger;
 
-            dialog_processor.sendToClient(session_id, 'Специалист поддержки зашел в чат');
-            dialog_processor.startChatToBankSpecialist(session_id, ws);
+            dialog_processor.sendToClient(client_id, messenger, 'Специалист поддержки зашел в чат');
+            dialog_processor.startChatToBankSpecialist(client_id, messenger, ws);
 
-            console.debug(`Специалист банка открывает чат с ${session_id}`);
+            console.debug(`Специалист банка открывает чат с ${client_id} из ${messenger}`);
         }
         if (data.type == 'Close chat') {
-            dialog_processor.sendToClient(session_id, 'Специалист поддержки вышел из чата');
-            dialog_processor.stopChatToBankSpecialist(session_id);
+            dialog_processor.sendToClient(client_id, messenger, 'Специалист поддержки вышел из чата');
+            dialog_processor.stopChatToBankSpecialist(client_id, messenger);
 
-            console.debug(`Специалист банка закрывает чат с ${session_id}`);
+            console.debug(`Специалист банка закрывает чат с ${client_id} из ${messenger}`);
+
+            client_id = null;
+            messenger = null;
         }
         if (data.type == 'New message') {
-            dialog_processor.sendToClient(session_id, data.message);
+            dialog_processor.sendToClient(client_id, messenger, data.message);
+
+            console.debug(`Специалист банка прислал сообщение: ${data.message}`)
         }
-        console.debug(`Кто-то прислал сообщение: ${message}`)
     });
     ws.on('close', function close() {
-        if (session_id) {
-            dialog_processor.sendToClient(session_id, 'Специалист поддержки вышел из чата');
-            dialog_processor.stopChatToBankSpecialist(session_id);
+        if (client_id && messenger) {
+            dialog_processor.sendToClient(client_id, messenger, 'Специалист поддержки вышел из чата');
+            dialog_processor.stopChatToBankSpecialist(client_id, messenger);
 
-            console.debug(`Специалист банка закрывает чат с ${session_id}`);
+            console.debug(`Специалист банка закрывает чат с ${client_id} из ${messenger}`);
         }
     });
 

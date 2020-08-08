@@ -3,7 +3,8 @@ Pace.options.ajax.trackWebSockets = false;
 function showApplication(id) {
     const application = applications.find(app => app.id == id);
 
-    chat_session_id = application.session_id;
+    active_chat.client_id = application.client_id;
+    active_chat.messenger = application.messenger;
 
     // Устанавливаем данные окна
     $('#name').html(application.application);
@@ -35,7 +36,8 @@ $('#switch').on("change" , function() {
 
             webSocket.send(JSON.stringify({
                 type: 'Open chat',
-                session_id: chat_session_id
+                client_id: active_chat.client_id,
+                messenger: active_chat.messenger
             }));
         };
         webSocket.onmessage = function(event) {
@@ -47,6 +49,9 @@ $('#switch').on("change" , function() {
     }else {
         webSocket.close();
         webSocket = null;
+
+        active_chat.client_id = null;
+        active_chat.messenger = null;
 
         sendMessage('Специалист банка отключился от чата.', 'right');
         $('#chat').hide();
