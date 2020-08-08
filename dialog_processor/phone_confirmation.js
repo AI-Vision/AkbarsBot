@@ -36,7 +36,7 @@ exports.process = async function(client, message) {
     if (client.phone) {
         console.error(`У клиента уже установлен номер телефона ${client.phone}`);
         // Сбрасываем позицию
-        dialog_processor.resetPosition(client);
+        dialog_processor.resetPosition(session_id);
         return;
     }
 
@@ -55,7 +55,7 @@ exports.process = async function(client, message) {
             if (message.toLowerCase().indexOf('отмена') != -1) {
                 console.info(`Клиент отменил операцию подтверждения телефона`);
                 delete positions[session_id];
-                dialog_processor.resetPosition(client);
+                dialog_processor.resetPosition(session_id);
                 return 'Может быть вас интересуют другие продукты?\nВы можете обратится ко мне в любой момент и я помогу!';
             }
 
@@ -79,7 +79,7 @@ exports.process = async function(client, message) {
             if (message.toLowerCase().indexOf('отмена') != -1) {
                 console.info(`Клиент отменил операцию подтверждения телефона`);
                 delete positions[session_id];
-                dialog_processor.resetPosition(client);
+                dialog_processor.resetPosition(session_id);
                 return 'Может быть вас интересуют другие продукты?\nВы можете обратится ко мне в любой момент и я помогу!';
             }
             // Если код не совпадает

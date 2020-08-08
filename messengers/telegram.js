@@ -31,8 +31,9 @@ router.post('/', async function(req, res){
     const message = req.body.message.text;
 
     const result = await dialog_processor.process(message, chat_id, 'telegram');
-
-    exports.sendMessage(result, chat_id);
+    if (result) {
+        exports.sendMessage(result, chat_id);
+    }
 })
 
 exports.sendMessage = async function(message, chat_id) {
@@ -42,7 +43,7 @@ exports.sendMessage = async function(message, chat_id) {
             text: message
         });
 
-        console.log(response.data)
+        console.log('Telegram response data', response.data)
     }catch (error) {
         console.error('Telegram request error', error);
     }
@@ -50,9 +51,13 @@ exports.sendMessage = async function(message, chat_id) {
 
 (async () => {
     // TODO: Регистрация веб-хука
-    axios.post(`https://api.telegram.org/bot${config.telegram.token}/setWebhook`, {'url': 'https://akbars.gistrec.ru/telegram'});
-    console.log('Регистрация вебхука для Telegram завершена!')
+    try {
+        axios.post(`https://api.telegram.org/bot${config.telegram.token}/setWebhook`, {'url': 'https://akbars.gistrec.ru/telegram'});
+        console.log('Регистрация вебхука для Telegram завершена!')
+    }catch (error) {
+        console.log(`При регистрации вебхука для Telegram произошла ошибка`, error.data);
+    }
 })();
 
 
-module.exports = router;
+exports.router = router;

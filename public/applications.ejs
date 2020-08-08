@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="vendor\fontawesome\css\font-awesome.css">
     <link rel="stylesheet" href="vendor\animate.css\animate.css">
     <link rel="stylesheet" href="vendor\bootstrap\css\bootstrap.css">
+    <link rel="stylesheet" href="vendor\switchery\switchery.min.css">
 
     <!-- App styles -->
     <link rel="stylesheet" href="styles\pe-icons\pe-icon-7-stroke.css">
@@ -172,8 +173,15 @@
                             </tbody>
                         </table>
                         <!-- /Данные заявки -->
+
+                        <!-- Включалка чата -->
+                        <div class="form-group">
+                            <p>Подключиться к чату&nbsp;&nbsp;<input type="checkbox" id="switch"></p>
+                        </div>
+                        <!-- /Включалка чата -->
+
                         <!-- Чат -->
-                        <div class="chat_window">
+                        <div class="chat_window" id="chat" style="display: none;">
                             <ul class="messages"></ul>
                             <div class="bottom_wrapper clearfix">
                                 <div class="message_input_wrapper">
@@ -213,6 +221,7 @@
 <script src="vendor\pacejs\pace.min.js"></script>
 <script src="vendor\jquery\dist\jquery.min.js"></script>
 <script src="vendor\bootstrap\js\bootstrap.min.js"></script>
+<script src="vendor\switchery\switchery.min.js"></script>
 
 <!-- App scripts -->
 <script src="scripts\luna.js"></script>
@@ -222,6 +231,18 @@
 <script>
 /** Храним все заявления */
 var applications = <%- JSON.stringify(applications) %>
+
+/** Активная сессия в чате */
+var chat_session_id;
+
+/** Вебсокет создается при открытии чата */
+var webSocket = null;
+
+$(document).ready(function () {
+    // Native javascript
+    var elem1 = document.querySelector('#switch');
+    var elem1 = new Switchery(elem1);
+});
 </script>
 
 </body>

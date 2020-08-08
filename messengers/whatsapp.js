@@ -15,9 +15,10 @@ router.post('/', async function(req, res){
         console.log(message)
         if (!message.fromMe) {
             const chat_id = message.chatId;
-            const text = await dialog_processor.process(message.body, chat_id, 'whatsapp');
-            console.log(text)
-            exports.sendMessage(text, chat_id);
+            const result = await dialog_processor.process(message.body, chat_id, 'whatsapp');
+            if (result) {
+                exports.sendMessage(result, chat_id);
+            }
         }
     };
 })
@@ -41,4 +42,4 @@ exports.sendMessage = async function(msg, chat_id) {
 // TODO: Регистрация веб-хука
 // requests.post('https://api.telegram.org/bot{token}/setWebhook'.format(token=config.TOKEN), data=json.dumps({'url': 'https://akbars.gistrec.ru/telegram'}), headers= {'Content-Type':
 
-module.exports = router;
+exports.router = router;

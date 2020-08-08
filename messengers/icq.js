@@ -15,7 +15,10 @@ get_events = async function() {
                 if(event.type == 'newMessage') {
                     console.log(event.payload.from.userId);
                     const result = await dialog_processor.process(event.payload.text, event.payload.from.userId, 'icq');
-                    await exports.sendMessage(result, event.payload.chat.chatId);
+
+                    if (result) {
+                        await exports.sendMessage(message, event.payload.chat.chatId);
+                    }
                 };
             };
         };
@@ -35,5 +38,6 @@ exports.sendMessage = async function(msg, chat_id) {
 
 // TODO: Регистрация веб-хука
 // requests.post('https://api.telegram.org/bot{token}/setWebhook'.format(token=config.TOKEN), data=json.dumps({'url': 'https://akbars.gistrec.ru/telegram'}), headers= {'Content-Type':
-get_events()
-module.exports = router;
+get_events();
+
+exports.router = router;

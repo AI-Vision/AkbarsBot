@@ -1,4 +1,4 @@
-const uuid       = require('uuid-by-string');
+const uuid = require('uuid-by-string');
 
 const processors = {
     phone_confirmation: require('./phone_confirmation'),
@@ -20,6 +20,8 @@ const processors = {
 const Positions = {
     DialogFlow: 'DialogFlow', // Общается с DialogFlow ботом
 
+    BankSpecialist: 'BankSpecialist', // Общается со специалистом банка
+
     DepositOpen: 'Переходим на составление заявки на открытие вклада',
     CreditCard: 'Переходим на составление заявки на кредитную карту',
     OpenCredir: 'Переходим на составление заявки на кредит',
@@ -30,6 +32,8 @@ const Positions = {
 /**
  * Список всех клиентов
  * Для каждого клиента хранятся данные
+ *     @property {String} messenger  - мессенджер или соц. сеть клиента
+ *     @property {String} client_id  - идентификатор клиента
  *     @property {String} session_id - идентификатор сессии клиента
  *     @property {String} positioin  - позиция в диалоге, одно из Position
  *     @property {String} interest   - услуга, которую выбрал клиент, например название дебетовой карты
@@ -68,11 +72,14 @@ exports.process = async function(message, client_id, messenger) {
 
     // Если клиент еще не писал, то его нет в этом массиве
     if (clients[session_id] == undefined) {
-        clients[session_id] = {position: Positions.DialogFlow, session_id, interest: null, phone: null};
+        clients[session_id] = {position: Positions.DialogFlow, session_id, messenger, client_id, interest: null, phone: null};
     }
 
     // Если клиент общается не с DialogFlow, т.е. составляет заявку, то у него должен быть подтвержден номер телефона
-    if (clients[session_id].position != Positions.DialogFlow && !clients[session_id].phone) {
+    if (clients[session_id].position != Positions.DialogFlow &&
+        clients[session_id].position != Positions.BankSpecialist &&
+        clients[session_id].phone == null)
+    {
         const res = await processors.phone_confirmation.process(clients[session_id], message);
         if (res != 'Телефон подтвержден') return res;
     }
@@ -101,6 +108,12 @@ exports.process = async function(message, client_id, messenger) {
                 }
             }
             return result;
+
+        // Общается со специалистом из банка
+        case Positions.BankSpecialist:
+            exports.sendToBankSpecialist(session_id, message);
+            return null;
+
 
         // TODO: Объединить код снизу
 
@@ -136,8 +149,67 @@ exports.process = async function(message, client_id, messenger) {
     }
 }
 
-exports.resetPosition = function(client) {
-    clients[client.session_id].position = Positions.DialogFlow;
+const messengers = {
+    ok: require('../messengers/ok'),
+    vk: require('../messengers/vk'),
+    icq: require('../messengers/icq'),
+    viber: require('../messengers/viber'),
+    telegram: require('../messengers/telegram'),
+    whatsapp: require('../messengers/whatsapp'),
+}
+
+exports.resetPosition = function(session_id) {
+    clients[session_id].position = Positions.DialogFlow;
+}
+
+
+/////////////////////////////////////////////////
+//      Работа с BankSpecialis <-> client      //
+/////////////////////////////////////////////////
+/**
+ * Ассоциативный список session_id => BankSpecialis
+ */
+let links = {};
+
+/**
+ * Функция, вызываемая 'извне' - когда специалист банка открывает чат
+ * Устаналивает позицию на BankSpecialist
+ *
+ * @param {String} session_id      - идентфиикатор клиента
+ * @param {Object} bank_specialist - WebSocker объект банковского специалиста
+ */
+exports.startChatToBankSpecialist = function(session_id, bank_specialist) {
+    clients[session_id].position = Positions.BankSpecialist;
+
+    links[session_id] = bank_specialist;
+}
+
+/**
+ * Функция, вызываемая 'извне' - когда специалист банка закрыл чат
+ * @param {String} session_id - идентфиикатор клиента
+ */
+exports.stopChatToBankSpecialist = function(session_id) {
+    clients[session_id].position = Positions.DialogFlow;
+
+    delete links[session_id];
+}
+
+/**
+ * Отправляем сообщение клиенту
+ */
+exports.sendToClient = function(session_id, message) {
+    const client_id = clients[session_id].client_id;
+    const messenger = clients[session_id].messenger;
+
+    messengers[messenger].sendMessage(message, client_id);
+}
+
+/**
+ * Отправляем сообщение банковскому специалисту
+ */
+exports.sendToBankSpecialist = function(session_id, message) {
+    const bank_specialist = links[session_id];
+    bank_specialist.send(message);
 }
 
 exports.clients = clients;

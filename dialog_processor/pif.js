@@ -129,7 +129,7 @@ exports.process = function(client, message) {
             // Удаляем ненужные данные и сбрасываем позицию
             delete data[session_id];
             delete positions[session_id];
-            dialog_processor.resetPosition(client);
+            dialog_processor.resetPosition(session_id);
 
             return msg;
     }

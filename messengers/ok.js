@@ -31,15 +31,23 @@ router.post('/', async function(req, res){
     const chat_id = req.body.recipient.chat_id;
     const message = req.body.message.text;
 
-    const result = await dialog_processor.process(message, user_id, 'ok');
+    // Костыль
+    // Так как у sendMessage два параметра, то нужно объединить user_id и chat_id
+    const client_id = `${user_id}|${chat_id}`;
 
-    exports.sendMessage(result, chat_id, user_id);
+    const result = await dialog_processor.process(message, client_id, 'ok');
+    if (result) {
+        exports.sendMessage(result, client_id);
+    }
 })
 
-exports.sendMessage = async function(msg, chat_id, user_id) {
+exports.sendMessage = async function(msg, client_id) {
     try {
+        // Костыль, читай выше
+        const [user_id, chat_id] = client_id.split('|');
+
         const response = await axios.post(`https://api.ok.ru/graph/me/messages/${chat_id}?access_token=${config.ok.token}`, {
-            recipient: {user_id:user_id},
+            recipient: {user_id},
             message: {text: msg}
         }, {headers: {'Content-Type': 'application/json;charset=utf-8'}});
 
@@ -50,9 +58,12 @@ exports.sendMessage = async function(msg, chat_id, user_id) {
 };
 
 (async () => {
-    const hook_response = await axios.post(`https://api.ok.ru/graph/me/subscribe?access_token=${config.ok.token}`, {url : 'https://akbars.gistrec.ru/ok'}, {headers: {'Content-Type': 'application/json;charset=utf-8'}})
-    // console.log(hook_response.data);
-    console.log('Регистрация вебхука для ОК завершена!')
+    try {
+        const hook_response = await axios.post(`https://api.ok.ru/graph/me/subscribe?access_token=${config.ok.token}`, {url : 'https://akbars.gistrec.ru/ok'}, {headers: {'Content-Type': 'application/json;charset=utf-8'}})
+        console.log('Регистрация вебхука для ОК завершена!')
+    }catch (error) {
+        console.log('При регистрации вебхука для Ok произошла ошибка', error.data);
+    }
 })();
 
-module.exports = router;
+exports.router = router;

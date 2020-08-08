@@ -13,13 +13,31 @@ const bot = new ViberBot({
 	name: "АК Барсик",
 	avatar: "http://viber.com/avatar.jpg"
 });
+
 router.use('/', async function(req, res){
     res.send('ok');
-    if(req.body.event=='message') {
-        let text = req.body.message.text;
-        let id = req.body.sender.id;
-        bot.sendMessage(new UserProfile(id=id, name=req.body.sender.name), new TextMessage(text= await dialog_processor.process(text, id, 'viber')));
+
+    if (req.body.event=='message') {
+        const text = req.body.message.text;
+        const id = req.body.sender.id;
+        const name = req.body.sender.name;
+
+        // Костыль
+        // Так как у sendMessage два параметра, то нужно объединить client_id и name
+        const client_id = `${id}|${name}`;
+
+        const result = await dialog_processor.process(text, client_id, 'viber');
+        if (result) {
+            exports.sendMessage(result, client_id);
+        }
     };
 })
 
-module.exports = router;
+exports.sendMessage = function(message, client_id) {
+    // Костыль, читай выше
+    const [id, name] = client_id.split('|');
+
+    bot.sendMessage(new UserProfile(id, name), new TextMessage(message));
+}
+
+exports.router = router;

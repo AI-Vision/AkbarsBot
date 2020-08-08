@@ -57,9 +57,12 @@
 	list-style: none;
 	padding: 20px 10px 0 10px;
 	margin: 0;
-	height: 347px;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    height: 347px;
+    overflow:   scroll;
+}
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
 }
 
 .messages .message {

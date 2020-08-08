@@ -32,8 +32,9 @@ router.post('/', async function(req, res){
     const user_id = req.body.object.user_id;
 
     const result = await dialog_processor.process(message, user_id, 'vk');
-
-    exports.sendMessage(result, user_id);
+    if (result) {
+        exports.sendMessage(result, user_id);
+    }
 })
 
 exports.sendMessage = async function(message, user_id) {
@@ -49,8 +50,8 @@ exports.sendMessage = async function(message, user_id) {
         const response = await axios.get('https://api.vk.com/method/messages.send', { params });
         console.log(response.data)
     }catch (error) {
-        console.error(`VK request error`, error);
+        console.error(`VK request error`, error.data);
     }
 }
 
-module.exports = router;
+exports.router = router;

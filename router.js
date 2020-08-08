@@ -22,12 +22,12 @@ router.use('/index',  require('./routes/index.js'));
 router.use('/applications', require('./routes/applications.js'));
 
 /** Web hooks */
-router.use('/vk', require('./messengers/vk.js'));
-router.use('/ok', require('./messengers/ok.js'));
-router.use('/icq', require('./messengers/icq.js'));
-router.use('/viber', require('./messengers/viber.js'));
-router.use('/telegram', require('./messengers/telegram.js'));
-router.use('/whatsapp', require('./messengers/whatsapp.js'));
+router.use('/vk', require('./messengers/vk.js').router);
+router.use('/ok', require('./messengers/ok.js').router);
+router.use('/icq', require('./messengers/icq.js').router);
+router.use('/viber', require('./messengers/viber.js').router);
+router.use('/telegram', require('./messengers/telegram.js').router);
+router.use('/whatsapp', require('./messengers/whatsapp.js').router);
 
 /** Logout request */
 router.get('/logout', function(req, res) {
